@@ -41,9 +41,6 @@ def application(environ, start_response):
         with open("/var/www/html/images/image.png", 'wb') as f:
             f.write(png_recovered)   
 
-        log.info(f"python version: {sys.version}")
-        
-        #image = cv2.imread("/var/www/html/image.png")
         #result_img = cv2.bitwise_not(image)
         #cv2.imwrite("/var/www/html/image.png",result_img)
     else:
