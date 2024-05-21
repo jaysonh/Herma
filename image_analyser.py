@@ -65,6 +65,13 @@ def analyse_image( image_path ):
         print(f"Failed to load image from '{image_path}'.")
     pass
 
+def remove_image(file_path):
+    try:
+        os.remove(file_path)
+        print(f"File '{file_path}' deleted successfully.")
+    except OSError as e:
+        print(f"Error deleting file: {e}")
+
 def main():
     app_running = True
     while app_running:

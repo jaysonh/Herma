@@ -15,6 +15,11 @@ let colour_clusters = []
  }
 var index = 0
 
+
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 function parseJSON()
 {
 
@@ -34,8 +39,9 @@ function parseJSON()
 function loadResultsFromJson( file_path )
 {
 	console.log("loading json file: " + file_path);
-	loading = false;
 
+	loading = false;
+	sleep(1000);
         json_data = loadJSON( file_path, parseJSON )
 }
 
