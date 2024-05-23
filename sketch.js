@@ -7,7 +7,7 @@ let instructions_height = 20;
 let instruction_canvas;
 
 let json_data = null;
-
+let prev_id = ""
 
 let colour_clusters = []
 
@@ -41,8 +41,22 @@ function loadResultsFromJson( file_path )
 	console.log("loading json file: " + file_path);
 
 	loading = false;
-	sleep(1000);
-        json_data = loadJSON( file_path, parseJSON )
+	
+	var finished = false
+
+        	sleep(1000); // sleep for 2 seconds (need to make a better way to do this)
+	        json_data = loadJSON( file_path, parseJSON )
+		console.log("loaded image data: " + json_data['id'])
+		//if( json_data['id'] === prev_id) // still haven't loaded a new set of data
+		//{
+		//}else
+		//{
+		//	//json_data = loadJSON( file_path, parseJSON );
+		//	finished = true;
+		//}
+		//prev_id = json_data['id']
+
+
 }
 
 function mousePressed()
@@ -92,8 +106,6 @@ function mousePressed()
      {
 	method: "POST",
         body: data
-     //}).then((response) => { processed_img = loadImage("result_images/result.png"); loading = false; loadMetaJson(); });
-     //}).then((response) => {loadResultsFromJson("http://3.149.240.150/working_data/data.json") });
      }).then((response) => {loadResultsFromJson("working_data/data.json") });
 }
 

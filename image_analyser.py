@@ -5,6 +5,7 @@ import numpy
 from sklearn.cluster import KMeans
 import json
 import datetime
+import time
 
 num_clusters = 6
 
@@ -40,19 +41,26 @@ def generate_timestamp():
 
     return str(timestamp)
 
+def get_unique_id():
+    timestamp = int(time.time() * 1000)  # Multiply by 1000 to get milliseconds
+    unique_id = str(timestamp)    
+    return unique_id
+
 def analyse_image( image_path ):
     print(f"Analysing image {image_path}")
     image = cv2.imread(image_path) 
     #output_path = "/var/www/html/result_images/result.png"
     output_filename = "kmeans_" + generate_timestamp() + ".png"
     output_path = "/var/www/html/result_images/" + output_filename
+    copy_path = "/var/www/html/result_images/original.png"
 
     if image is not None:
         result_img, cluster_centers = find_clusters( image, 256, 192 )
-        #result_img = cv2.bitwise_not(image)
         cv2.imwrite(output_path, result_img)
+        cv2.imwrite(copy_path, image)
         meta_data = {
-                        #'image_file' : "http://3.149.240.150/result_images/result.png",
+                        'id' : get_unique_id(),
+                        'image_original': "http://3.149.240.150/result_images/original.png",
                         'image_file' : "http://3.149.240.150/result_images/" + output_filename,
                         'image_width' : 0,
                         'image_height' : 0,
@@ -61,14 +69,10 @@ def analyse_image( image_path ):
                     }
         with open('working_data/data.json', 'w') as file:
                 file.write(json.dumps(meta_data))
-    else:
-        print(f"Failed to load image from '{image_path}'.")
-    pass
 
 def remove_image(file_path):
     try:
         os.remove(file_path)
-        print(f"File '{file_path}' deleted successfully.")
     except OSError as e:
         print(f"Error deleting file: {e}")
 
@@ -82,9 +86,7 @@ def main():
 
         if os.path.isfile(file_path):
             analyse_image(file_path)
-            #remove_image(file_path)
-        else:
-            print(f"The file '{file_name}' does not exist in the folder.")
+            remove_image(file_path)
         time.sleep(1)
 
 if __name__ == "__main__":
